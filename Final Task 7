@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Digital Dice Roller</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    #diceFace {
+      font-size: 60px;
+      margin: 20px;
+    }
+    #total {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    #history {
+      list-style: none;
+      padding: 0;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      background: #fff;
+    }
+    #history li {
+      padding: 5px;
+      border-bottom: 1px solid #eee;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎲 Two-Player Dice Roller</h1>
+  <button id="rollBtn">Roll Dice</button>
+  <div id="diceFace">🎲</div>
+  <div id="total">Player 1: 0 | Player 2: 0</div>
+  <ul id="history"></ul>
+
+  <script>
+    const rollBtn = document.getElementById('rollBtn');
+    const diceFace = document.getElementById('diceFace');
+    const totalDisplay = document.getElementById('total');
+    const historyList = document.getElementById('history');
+
+    let playerTurn = 1;
+    let scores = { 1: 0, 2: 0 };
+    let rollCount = 0;
+    const maxRolls = 10;
+
+    rollBtn.addEventListener('click', () => {
+      const roll = Math.floor(Math.random() * 6) + 1;
+      scores[playerTurn] += roll;
+      rollCount++;
+
+      diceFace.textContent = `🎲 ${roll}`;
+      totalDisplay.textContent = `Player 1: ${scores[1]} | Player 2: ${scores[2]}`;
+
+      const rollItem = document.createElement('li');
+      rollItem.textContent = `Player ${playerTurn} rolled a ${roll}`;
+      historyList.appendChild(rollItem);
+
+      if (rollCount >= maxRolls) {
+        rollBtn.disabled = true;
+        let winner = '';
+        if (scores[1] > scores[2]) {
+          winner = 'Player 1 wins! 🏆';
+        } else if (scores[2] > scores[1]) {
+          winner = 'Player 2 wins! 🏆';
+        } else {
+          winner = "It's a tie! 🤝";
+        }
+        const resultItem = document.createElement('li');
+        resultItem.textContent = `🎉 Game Over: ${winner}`;
+        resultItem.style.fontWeight = 'bold';
+        historyList.appendChild(resultItem);
+      } else {
+        playerTurn = playerTurn === 1 ? 2 : 1;
+      }
+    });
+  </script>
+
+</body>
+</html>
